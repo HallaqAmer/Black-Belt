@@ -20,7 +20,7 @@
         <div class="container pie-info">
             <h1>{{ pie.name }} By {{ pie.added_by.first_name }} {{ pie.added_by.last_name }}</h1>
             <p>{{ pie.filling }}</p>
-            <p>With a {{ pie.crust }}</p>
+            <p>With a {{ pie.crust }} </p>
             <p>Cast a Vote:</p>
             {% if  not vote  %}
             <a href="{% url 'pypieapp:vote' pie.id %}" class="btn btn-primary">
