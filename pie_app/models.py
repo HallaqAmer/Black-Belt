@@ -34,6 +34,13 @@ class Pypie(models.Model):
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
     objects = PypieManager()
+
+class Vote(models.Model):
+    pie=models.ForeignKey(Pypie, related_name='voted_pies',on_delete=models.CASCADE,null=True)
+    user=models.ForeignKey(User, related_name='voted_users',on_delete=models.CASCADE,null=True)
+    created_at=models.DateTimeField(auto_now_add=True)
+    updated_at=models.DateTimeField(auto_now=True)
+    
     
 def create_pie(postData,id):
 
@@ -60,10 +67,18 @@ def add_vote(user_id,pie_id):
 
     user=User.objects.get(id=user_id)
     pie=Pypie.objects.get(id=pie_id)
+    pie.liked_by.add(user)
+    new_vote=Vote.objects.create(pie=pie,user=user)
+    return new_vote
+
+
+def remove_vote(user_id,pie_id):
+
+    user=User.objects.get(id=user_id)
+    pie=Pypie.objects.get(id=pie_id)
     if user in pie.liked_by.all():
         pie.liked_by.remove(user)
-    else:
-        pie.liked_by.add(user)
+
 
 def delete_pie(id):
     pie=Pypie.objects.get(id=id)
@@ -77,4 +92,7 @@ def update_pie(postData,pie_id):
     pie.crust=postData["crust"]
     pie.save()
     return pie
-    
+
+def get_all_votes():
+    votes=Vote.objects.all()
+    return votes

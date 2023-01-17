@@ -12,6 +12,7 @@ urlpatterns = [
     path('editpie', views.make_edit_pie, name="editpie"),
     path('delete/<int:id>', views.delete_pie, name="delete"),
     path('show/<int:id>', views.display_pie, name="pie_info"),
-    path('vote/<int:id>', views.add_vote, name="vote"),
+    path('vote/add/<int:id>', views.add_vote, name="vote"),
+    path('vote/remove/<int:id>', views.remove_vote, name="remove_vote"),
     
 ]

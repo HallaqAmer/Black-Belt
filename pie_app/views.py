@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from . import models
-from . models import Pypie
+from . models import Pypie,Vote
 from login_app.models import User
 from django.contrib import messages
 
@@ -82,9 +82,11 @@ def display_pie(request,id):
     user_id=request.session["userid"]
     logged_user=User.objects.get(id=user_id)
     pie=Pypie.objects.get(id=id)
+    vote=Vote.objects.filter(user=logged_user,pie=pie)
     context = {
         "pie": pie,
         "logged_user": logged_user,
+        "vote": vote,
     }
     return render(request,"pie_info.html",context)
 
@@ -96,6 +98,17 @@ def add_vote(request,id):
     pie_id=id
     models.add_vote(user_id,pie_id)
     return redirect("/dashboard/pypies/list")
+
+def remove_vote(request,id):
+
+    if not "userid"  in request.session:
+        return redirect('/')
+    user_id=request.session["userid"]
+    pie_id=id
+    models.remove_vote(user_id,pie_id)
+    return redirect("/dashboard/pypies/list")
+
+
 
 
 def logout_user(request):
